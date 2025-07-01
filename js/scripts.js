@@ -26,7 +26,7 @@ function carregar_novidades(){
                 <h3>${liv.nome}</h3>
                 <p class="preco">R$ ${liv.preco}</p>
                 <button>
-                   <img src="img/carrinho1.png">
+                   <img src="img/carrinhoo.png">
                    <p>Adicionar ao carrinho</p>
                 </button>
             </div>`
@@ -367,6 +367,24 @@ function carregar_produtos_carrinho(){
         lista_produtos_carrinho.innerHTML+=mont; 
     })
 }
+
+
+
+
+let usuario_logado = "usuario_logado"
+// nome do localstorange
+if(window.localStorage.getItem(usuario_logado)){
+    let us = window.localStorage.getItem(usuario_logado);
+    // converter a variável us para json
+    us = JSON.parse(us)
+    
+    let img_usuario = `<img src= ${us.payload.fotousuario} class="img_usuario">`
+    let nome_us = us.payload.nomeusuario;
+    document.getElementsByClassName("usuario")[0].style.padding="15px"
+
+    document.getElementsByClassName("usuario")[0].innerHTML = img_usuario + nome_us;
+}
+
 function efetuarlogin(){
     const usuario = document.getElementById("txtusuario")
     const senha = document.getElementById("txtpassword")
@@ -378,13 +396,20 @@ function efetuarlogin(){
             "content-type": "application/json"
         },
         body:JSON.stringify({
-            usuario: usuario.ariaValueMax,
+            usuario: usuario.value,
             senha:senha.value
         })
     })
     .then((rs)=>rs.json())
     .then((dados)=>{
-        console.log(dados)
+        window.localStorage.setItem(usuario_logado,JSON.stringify(dados));
+        // limpar o formulario 
+        usuario.value ="";
+        senha.value = "";
+        // atualizar a tela 
+        window.location.reload();
+
+
     })
     .catch((erro)=>console.error(erro))
 }
